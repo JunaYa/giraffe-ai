@@ -1,0 +1,11 @@
+### GIRRAFE
+
+GET http://localhost:6688/
+
+### CHAT
+
+GET http://localhost:6688/api/chat
+
+POST http://localhost:6688/api/chat?name=test
+
+PATCH http://localhost:6688/api/chat/:id
