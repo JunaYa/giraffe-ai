@@ -1,0 +1,42 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# PLAN: Phase 1 – Foundational Work
+
+## Objective
+Establish the core foundation for the permission system, enabling future feature development and extensibility. Focus on domain model, database schema, authentication, and basic API scaffolding.
+
+## Scope
+- Core domain model (User, Organization, Team, Repository, Role, Permission, RoleBinding, BranchProtection)
+- Database schema and migrations for all core entities
+- JWT-based authentication (user registration, login, profile)
+- Basic RBAC permission evaluation trait and implementation stub
+- REST API scaffolding (Axum + Utoipa), OpenAPI docs, health/metrics endpoints
+- Project structure, configuration (YAML), error handling (thiserror/anyhow)
+- Observability: tracing, structured logging
+- Initial test setup (unit + integration)
+
+## Out of Scope (Phase 1)
+- UI/UX implementation
+- ABAC/branch protection logic
+- Advanced permission aggregation/inheritance
+- Custom roles, audit trail, activity tracking
+- Team nesting, invitation flows, enterprise features
+
+## Deliverables
+- Compiling Rust project with all core types, traits, and API endpoints stubbed
+- Database migrations for all entities
+- JWT auth working for user endpoints
+- OpenAPI docs generated
+- Health and metrics endpoints
+- Passing `cargo test` and `cargo clippy`
+
+## Next Steps
+- Implement core domain structs and enums
+- Set up database and migrations
+- Implement authentication endpoints
+- Scaffold API endpoints for CRUD on core entities
+- Set up logging, config, and error handling
+- Write initial tests

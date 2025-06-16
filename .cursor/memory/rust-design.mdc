@@ -1,0 +1,39 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Memory Bank: Rust Design & Architecture
+
+## Architecture Overview
+- Users, organizations, teams, repositories, branch protection, roles, and permissions are core entities.
+- Teams can be nested and belong to organizations; users and teams can be granted access to repositories.
+- Branch protection enforces ABAC policies.
+
+## Domain Model
+- User, Organization, Team, Repository, BranchProtection: all with UUIDs, timestamps, and relevant fields.
+- Roles: Admin, Maintainer, Writer, Triager, Reader, Custom(String)
+- Permissions: ManageSettings, ManageSecurity, ManageBilling, ManageTeams, ManageRepos, Push, Pull, Merge, ManageBranchProtection, Custom(String)
+- RoleBinding: binds subject (User/Team) to resource (Org/Team/Repo) with a role
+- ABAC: BranchProtectionRule with abac_policy (string, e.g., CEL/JSON logic)
+
+## Permission Evaluation
+- PermissionEvaluator trait: has_permission(user_id, resource_id, resource_type, permission, context) -> bool
+- AbacPolicyEvaluator trait: evaluate(policy, context) -> bool
+- Aggregation: direct, team, org roles; highest effective permission; recursive inheritance
+
+## API Layer
+- Axum + Utoipa, JWT auth, RBAC/ABAC checks, OpenAPI docs
+- Example: GET /api/repos/{repo_id}/permissions/effective?user_id=...
+
+## Observability & Config
+- tracing for logs, YAML config, /health and /metrics endpoints
+
+## Error Handling
+- thiserror for libs, anyhow for bins, centralized errors.rs
+
+## Extensibility
+- Strong typing, derive macros, custom roles, string-based ABAC
+
+## Testing
+- #[cfg(test)] for unit tests, sqlx::test for DB, must pass cargo test and clippy

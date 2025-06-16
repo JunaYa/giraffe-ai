@@ -1,0 +1,38 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Memory Bank: Product Requirements
+
+## Overview
+A web app for managing fine-grained permissions in collaborative software development, inspired by GitHub. Supports organizations, teams, repositories, users, roles, and advanced branch protection, with RBAC and ABAC models.
+
+## Core Features
+- User registration, authentication, and profile management
+- Role assignment at org, team, and repo levels
+- User invitation and activity tracking
+- Organization creation, roles (Owner, Member, Moderator, Billing Admin, Security Admin, App Admin), custom roles for enterprise
+- Team creation, nesting, membership, role assignment, permission inheritance
+- Repository creation, roles (Admin, Maintainer, Writer, Triager, Reader), direct/indirect access, visibility, settings
+- Branch protection rules (PR review, status checks, signed commits, linear history), pattern matching, ABAC enforcement
+- Permission evaluation: RBAC engine, ABAC engine, aggregation, inheritance, audit trail
+- RESTful API (OpenAPI/Utoipa), JWT auth, permission checks, reflection/introspection
+- UI: three-column layout, dynamic forms, request/response history, streaming, header input, auto-generated forms, history management
+- Security: audit logging, structured logs, health checks, metrics
+
+## Usage Scenarios
+- Team permission inheritance
+- Branch protection with multiple requirements
+- Effective permission queries
+- Custom enterprise roles
+
+## Non-Functional
+- Low-latency checks (<10ms), scalable, secure, extensible, reliable
+
+## Glossary
+- RBAC: Role-Based Access Control
+- ABAC: Attribute-Based Access Control
+- Org: Organization
+- Repo: Repository
+- PR: Pull Request
