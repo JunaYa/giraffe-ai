@@ -81,3 +81,74 @@ cargo nextest 是一个 Rust 增强测试工具。
 ```bash
 cargo install cargo-nextest --locked
 ```
+
+## docker 启动 postgres
+
+```bash
+ddocker run -d --name girrafe-postgres \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=password \
+  -e POSTGRES_DB=giraffe \
+  -p 5432:5432 \
+  postgres:latest
+```
+
+## pgcli 使用
+
+### pgcli 连接 postgres
+
+```bash
+//pglic chat //连接本地数据库
+pgcli postgresql://postgres:password@localhost:5432/chat
+```
+
+```bash
+\dt // 查看表
+\d messages // 查看表结构
+\d+ messages // 查看表详细信息
+\d+ messages // 查看表详细信息
+select * from _sqlx_migrations; // 查看迁移历史
+```
+
+## sqlx-cli 使用
+
+### sqlx-cli 创建数据库
+
+本地环境配置 DATABASE_URL 后，执行以下命令创建数据库，例如初始化本地数据库为 chat
+
+```bash
+// 例如初始化本地数据库为 chat
+DATABASE_URL=postgresql://postgres:password@localhost:5432/chat
+```
+
+### 创建数据库
+
+```bash
+sqlx database create
+# 或指定自定义名称（需先连接到默认数据库）
+DATABASE_URL=postgresql://postgres:password@localhost:5432/chat sqlx database create
+```
+
+```bash
+sqlx database drop
+# 或指定自定义名称（需先连接到默认数据库）
+DATABASE_URL=postgresql://postgres:password@localhost:5432/chat sqlx database drop
+```
+
+### 初始化数据库
+
+```bash
+sqlx migrate add init
+```
+
+### 迁移数据库
+
+```bash
+sqlx migrate run
+```
+
+### 回滚迁移
+
+```bash
+sqlx migrate revert
+```
