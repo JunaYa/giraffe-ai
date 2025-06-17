@@ -79,6 +79,10 @@ cargo install git-cliff
 cargo nextest 是一个 Rust 增强测试工具。
 
 ```bash
+cargo nextest run -- test_should_work
+```
+
+```bash
 cargo install cargo-nextest --locked
 ```
 
