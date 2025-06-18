@@ -11,7 +11,9 @@ anyhow = { workspace = true }
 argon2 = { version = "0.5.3", features = ["std"] }
 axum = { workspace = true }
 chrono = { version = "0.4.41", features = ["serde"] }
+jwt-simple = "0.12.12"
 serde = { workspace = true }
+serde_json = "1.0.140"
 serde_yaml = { workspace = true }
 sqlx = { workspace = true }
 thiserror = { workspace = true }
@@ -21,3 +23,4 @@ tracing-subscriber = { workspace = true }
 
 [dev-dependencies]
 sqlx-db-tester = "0.6.0"
+http-body-util = "0.1.3"

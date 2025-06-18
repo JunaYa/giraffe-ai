@@ -156,3 +156,15 @@ sqlx migrate run
 ```bash
 sqlx migrate revert
 ```
+
+### 证书
+
+生成测试证书
+
+```
+openssl genpkey -algorithm Ed25519 -out chat_server/fixtures/encoding.pem
+```
+
+```
+openssl pkey -in chat_server/fixtures/encoding.pem -pubout -out chat_server/fixtures/decoding.pem
+```

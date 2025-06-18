@@ -1,0 +1,30 @@
+### signup user
+
+POST http://localhost:6688/api/signup
+Content-Type: application/json
+
+{
+    "fullname": "Arjun",
+    "email": "arjun@acme.org",
+    "password": "hunter42"
+}
+
+### signin user
+
+POST http://localhost:6688/api/signin
+Content-Type: application/json
+
+{
+    "email": "arjun@acme.org",
+    "password": "hunter42"
+}
+
+### signin user(wrong password)
+
+POST http://localhost:6688/api/signin
+Content-Type: application/json
+
+{
+    "email": "arjun@acme.org",
+    "password": "hunter43"
+}

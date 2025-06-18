@@ -1,1 +1,0 @@
-/Users/mac/code/rust/girrafe/target/debug/girrafe: /Users/mac/code/rust/girrafe/src/config.rs /Users/mac/code/rust/girrafe/src/handlers/auth.rs /Users/mac/code/rust/girrafe/src/handlers/chat.rs /Users/mac/code/rust/girrafe/src/handlers/message.rs /Users/mac/code/rust/girrafe/src/handlers/mod.rs /Users/mac/code/rust/girrafe/src/lib.rs /Users/mac/code/rust/girrafe/src/main.rs
