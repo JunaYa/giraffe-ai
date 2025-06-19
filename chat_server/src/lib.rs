@@ -26,8 +26,6 @@ use crate::{
     utils::{DecodingKey, EncodingKey},
 };
 
-const REQUEST_ID_HEADER: &str = "x-request-id";
-
 #[derive(Debug, Clone)]
 pub(crate) struct AppState {
     inner: Arc<AppStateInner>,
