@@ -2,7 +2,6 @@ use std::{env, fs::File};
 
 use anyhow::{Result, bail};
 use serde::{Deserialize, Serialize};
-use tracing::info;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AppConfig {
@@ -35,7 +34,6 @@ impl AppConfig {
             (_, _, Ok(path)) => serde_yaml::from_reader(File::open(path)?),
             _ => bail!("Config file not found"),
         };
-        info!("config: {:?}", ret);
         Ok(ret?)
     }
 }

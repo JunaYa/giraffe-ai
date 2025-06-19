@@ -1,6 +1,7 @@
 mod config;
 mod error;
 mod handlers;
+mod middleware;
 mod models;
 mod utils;
 
@@ -14,12 +15,18 @@ pub use models::User;
 
 use axum::{
     Router,
+    middleware::from_fn_with_state,
     routing::{get, patch, post},
 };
 
 pub use config::AppConfig;
 
-use crate::utils::{DecodingKey, EncodingKey};
+use crate::{
+    middleware::{set_layer, verify_token},
+    utils::{DecodingKey, EncodingKey},
+};
+
+const REQUEST_ID_HEADER: &str = "x-request-id";
 
 #[derive(Debug, Clone)]
 pub(crate) struct AppState {
@@ -38,8 +45,6 @@ pub async fn get_router(config: AppConfig) -> Result<Router, AppError> {
     let state = AppState::try_new(config).await?;
 
     let api = Router::new()
-        .route("/signin", post(signin_handler))
-        .route("/signup", post(signup_handler))
         .route("/chat", get(list_chat_handler).post(create_chat_handler))
         .route(
             "/chat/{id}",
@@ -47,14 +52,17 @@ pub async fn get_router(config: AppConfig) -> Result<Router, AppError> {
                 .delete(delete_chat_handler)
                 .post(send_message_handler),
         )
-        .route("/chat/{id}/messages", get(list_message_handler));
+        .route("/chat/{id}/messages", get(list_message_handler))
+        .layer(from_fn_with_state(state.clone(), verify_token))
+        .route("/signin", post(signin_handler))
+        .route("/signup", post(signup_handler));
 
     let app = Router::new()
         .route("/", get(index_handler))
         .nest("/api", api)
         .with_state(state);
 
-    Ok(app)
+    Ok(set_layer(app))
 }
 
 // 当我调用 state.config => state.inner.config
