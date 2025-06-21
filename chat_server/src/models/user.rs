@@ -162,10 +162,10 @@ impl SigninUser {
 }
 #[cfg(test)]
 mod tests {
+    use crate::test_utils::get_test_pool;
+
     use super::*;
     use anyhow::Result;
-    use sqlx_db_tester::*;
-    use std::path::Path;
 
     #[test]
     fn hash_password_and_verify_should_work() -> Result<()> {
@@ -179,11 +179,8 @@ mod tests {
 
     #[tokio::test]
     async fn create_and_verify_user_should_work() -> Result<()> {
-        let tdb = TestPg::new(
-            "postgres://postgres:password@localhost:5432".to_string(),
-            Path::new("../migrations"),
-        );
-        let pool = tdb.get_pool().await;
+        // _tdb 没有被使用，但是要显式返回，需要 drop 时 drop 掉数据库
+        let (_tdb, pool) = get_test_pool(None).await;
 
         let input = CreateUser::new("none", "Arjun", "arjun@gmail.com", "hunter42");
         let user = User::create(&input, &pool).await?;
@@ -208,11 +205,7 @@ mod tests {
 
     #[tokio::test]
     async fn create_duplicate_user_should_fail() -> Result<()> {
-        let tdb = TestPg::new(
-            "postgres://postgres:password@localhost:5432".to_string(),
-            Path::new("../migrations"),
-        );
-        let pool = tdb.get_pool().await;
+        let (_tdb, pool) = get_test_pool(None).await;
 
         let input = CreateUser::new("none", "Arjun", "arjun@acme.org", "hunter42");
         User::create(&input, &pool).await?;

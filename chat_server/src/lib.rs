@@ -8,6 +8,7 @@ mod utils;
 use anyhow::Context;
 use handlers::*;
 use sqlx::PgPool;
+
 use std::{fmt, ops::Deref, sync::Arc};
 
 pub use error::{AppError, ErrorOutput};
@@ -101,32 +102,39 @@ impl fmt::Debug for AppStateInner {
 }
 
 #[cfg(test)]
-impl AppState {
-    pub async fn new_for_test(
-        config: AppConfig,
-    ) -> Result<(sqlx_db_tester::TestPg, Self), AppError> {
-        use sqlx_db_tester::TestPg;
-        let dk = DecodingKey::load(&config.auth.pk).context("failed to load dk")?;
-        let ek = EncodingKey::load(&config.auth.sk).context("failed to load ek")?;
-        // Parse the database URL to get the base URL without the database name
-        // Format is typically: postgresql://username:password@hostname:port/database
-        // We want everything before the last slash
-        let db_url = &config.server.db_url;
-        let base_url = match db_url.rfind('/') {
-            Some(pos) => &db_url[0..pos],
-            None => db_url, // Fallback if no slash found
-        };
 
-        let tdb = TestPg::new(base_url.to_string(), std::path::Path::new("../migrations"));
-        let pool = tdb.get_pool().await;
-        let state = Self {
-            inner: Arc::new(AppStateInner {
-                config,
-                pool,
-                ek,
-                dk,
-            }),
+mod test_utils {
+    use super::*;
+    use sqlx::PgPool;
+    use sqlx_db_tester::TestPg;
+
+    impl AppState {
+        pub async fn new_for_test(config: AppConfig) -> Result<(TestPg, Self), AppError> {
+            let dk = DecodingKey::load(&config.auth.pk).context("failed to load dk")?;
+            let ek = EncodingKey::load(&config.auth.sk).context("failed to load ek")?;
+            let db_url = &config.server.db_url;
+            let post = db_url.rfind('/').expect("invalid db_url");
+            let server_url = &config.server.db_url[0..post];
+            let (_tdb, pool) = get_test_pool(Some(server_url)).await;
+            let state = Self {
+                inner: Arc::new(AppStateInner {
+                    config,
+                    pool,
+                    ek,
+                    dk,
+                }),
+            };
+            Ok((_tdb, state))
+        }
+    }
+
+    pub async fn get_test_pool(url: Option<&str>) -> (TestPg, PgPool) {
+        let url = match url {
+            Some(url) => url.to_string(),
+            None => "postgres://postgres:password@localhost:5432".to_string(),
         };
-        Ok((tdb, state))
+        let tdb = TestPg::new(url, std::path::Path::new("../migrations"));
+        let pool = tdb.get_pool().await;
+        (tdb, pool)
     }
 }
