@@ -24,7 +24,7 @@ impl Workspace {
         let ws = sqlx::query_as(
             r#"
             UPDATE workspaces
-            SET owner_id = $1 
+            SET owner_id = $1
             WHERE id = $2 and (SELECT ws_id FROM users WHERE id = $1) = $2
             RETURNING id, name, owner_id, created_at
             "#,
@@ -56,8 +56,8 @@ impl Workspace {
     pub async fn find_by_id(id: u64, pool: &PgPool) -> Result<Option<Self>, AppError> {
         let ws = sqlx::query_as(
             r#"
-            SELECT id, name, owner_id, created_at 
-            FROM workspaces 
+            SELECT id, name, owner_id, created_at
+            FROM workspaces
             WHERE id = $1
             "#,
         )
@@ -82,5 +82,47 @@ impl Workspace {
         .await?;
 
         Ok(users)
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::{User, models::CreateUser, test_utils::get_test_pool};
+
+    use super::*;
+    use anyhow::{Ok, Result};
+
+    #[tokio::test]
+    async fn workspace_should_create_and_set_owner() -> Result<()> {
+        let (_tdb, pool) = get_test_pool(None).await;
+        let ws = Workspace::create("test", 0, &pool).await.unwrap();
+
+        let input = CreateUser::new(&ws.name, "Zhe Wang", "zhe@acme.org", "hunter42");
+        let user = User::create(&input, &pool).await.unwrap();
+
+        assert_eq!(ws.name, "test");
+        assert_eq!(user.ws_id, ws.id);
+
+        let ws = ws.update_owner(user.id as _, &pool).await.unwrap();
+        assert_eq!(ws.owner_id, user.id);
+        Ok(())
+    }
+
+    #[tokio::test]
+    async fn workspace_should_find_by_name() -> Result<()> {
+        let (_tdb, pool) = get_test_pool(None).await;
+        let ws = Workspace::find_by_name("acme", &pool).await.unwrap();
+        assert!(ws.is_some());
+        let ws = ws.unwrap();
+        assert_eq!(ws.name, "acme");
+        Ok(())
+    }
+
+    #[tokio::test]
+    async fn workspace_should_fetch_all_chat_users() -> Result<()> {
+        let (_tdb, pool) = get_test_pool(None).await;
+        let users = Workspace::fetch_all_chat_users(1, &pool).await.unwrap();
+        assert_eq!(users.len(), 5);
+        Ok(())
     }
 }

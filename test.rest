@@ -4,8 +4,8 @@ POST http://localhost:6688/api/signup
 Content-Type: application/json
 
 {
-    "fullname": "Alice",
-    "email": "alice@acme.org",
+    "fullname": "Arjun",
+    "email": "arjun@acme.org",
     "workspace": "acme",
     "password": "hunter42"
 }

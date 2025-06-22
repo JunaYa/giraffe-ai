@@ -102,10 +102,9 @@ impl fmt::Debug for AppStateInner {
 }
 
 #[cfg(test)]
-
 mod test_utils {
     use super::*;
-    use sqlx::PgPool;
+    use sqlx::{Executor, PgPool};
     use sqlx_db_tester::TestPg;
 
     impl AppState {
@@ -135,6 +134,18 @@ mod test_utils {
         };
         let tdb = TestPg::new(url, std::path::Path::new("../migrations"));
         let pool = tdb.get_pool().await;
+
+        // run prepared sql to insert test dat
+        let sql = include_str!("../fixtures/test.sql").split(';');
+        let mut ts = pool.begin().await.expect("begin transaction failed");
+        for s in sql {
+            if s.trim().is_empty() {
+                continue;
+            }
+            ts.execute(s).await.expect("execute sql failed");
+        }
+        ts.commit().await.expect("commit transaction failed");
+
         (tdb, pool)
     }
 }

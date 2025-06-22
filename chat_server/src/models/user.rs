@@ -28,8 +28,8 @@ impl User {
     pub async fn find_by_email(email: &str, pool: &PgPool) -> Result<Option<Self>, AppError> {
         let user = sqlx::query_as(
             r#"
-            SELECT id, ws_id, fullname, email, created_at 
-            FROM users 
+            SELECT id, ws_id, fullname, email, created_at
+            FROM users
             WHERE email = $1"#,
         )
         .bind(email)
@@ -78,8 +78,8 @@ impl User {
     pub async fn verify(input: &SigninUser, pool: &PgPool) -> Result<Option<Self>, AppError> {
         let user: Option<User> = sqlx::query_as(
             r#"
-            SELECT id, ws_id, fullname, email, password_hash, created_at 
-            FROM users 
+            SELECT id, ws_id, fullname, email, password_hash, created_at
+            FROM users
             WHERE email = $1
             "#,
         )
@@ -182,7 +182,7 @@ mod tests {
         // _tdb 没有被使用，但是要显式返回，需要 drop 时 drop 掉数据库
         let (_tdb, pool) = get_test_pool(None).await;
 
-        let input = CreateUser::new("none", "Arjun", "arjun@gmail.com", "hunter42");
+        let input = CreateUser::new("acme", "Arjun001", "arjun001@acme.org", "hunter42");
         let user = User::create(&input, &pool).await?;
         println!("user: {:?}", user);
         println!("input: {:?}", input);
@@ -207,7 +207,7 @@ mod tests {
     async fn create_duplicate_user_should_fail() -> Result<()> {
         let (_tdb, pool) = get_test_pool(None).await;
 
-        let input = CreateUser::new("none", "Arjun", "arjun@acme.org", "hunter42");
+        let input = CreateUser::new("acme", "Arjun001", "arjun001@acme.org", "hunter42");
         User::create(&input, &pool).await?;
         let ret = User::create(&input, &pool).await;
         match ret {

@@ -89,10 +89,10 @@ cargo install cargo-nextest --locked
 ## docker 启动 postgres
 
 ```bash
-ddocker run -d --name girrafe-postgres \
+docker run -d --name giraffe-postgres \
   -e POSTGRES_USER=postgres \
   -e POSTGRES_PASSWORD=password \
-  -e POSTGRES_DB=giraffe \
+  -e POSTGRES_DB=chat \
   -p 5432:5432 \
   postgres:latest
 ```
@@ -103,7 +103,7 @@ ddocker run -d --name girrafe-postgres \
 
 ```bash
 //pglic chat //连接本地数据库
-pgcli postgresql://postgres:password@localhost:5432/chat
+pgcli postgres://postgres:password@localhost:5432/chat
 ```
 
 ```bash
@@ -122,7 +122,7 @@ select * from _sqlx_migrations; // 查看迁移历史
 
 ```bash
 // 例如初始化本地数据库为 chat
-DATABASE_URL=postgresql://postgres:password@localhost:5432/chat
+DATABASE_URL=postgres://postgres:password@localhost:5432/chat
 ```
 
 ### 创建数据库
@@ -130,13 +130,13 @@ DATABASE_URL=postgresql://postgres:password@localhost:5432/chat
 ```bash
 sqlx database create
 # 或指定自定义名称（需先连接到默认数据库）
-DATABASE_URL=postgresql://postgres:password@localhost:5432/chat sqlx database create
+DATABASE_URL=postgres://postgres:password@localhost:5432/chat sqlx database create
 ```
 
 ```bash
 sqlx database drop
 # 或指定自定义名称（需先连接到默认数据库）
-DATABASE_URL=postgresql://postgres:password@localhost:5432/chat sqlx database drop
+DATABASE_URL=postgres://postgres:password@localhost:5432/chat sqlx database drop
 ```
 
 ### 初始化数据库
