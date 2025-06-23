@@ -16,6 +16,12 @@ pub enum AppError {
     #[error("internal server error")]
     SqlxError(#[from] sqlx::Error),
 
+    #[error("create chat error: {0}")]
+    CreateChatError(String),
+
+    #[error("not found: {0}")]
+    NotFound(String),
+
     #[error("password hash error")]
     PasswordHashError(#[from] argon2::password_hash::Error),
 
@@ -44,6 +50,8 @@ impl IntoResponse for AppError {
     fn into_response(self) -> Response<axum::body::Body> {
         let status = match &self {
             Self::SqlxError(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            Self::CreateChatError(_) => StatusCode::BAD_REQUEST,
+            Self::NotFound(_) => StatusCode::NOT_FOUND,
             Self::PasswordHashError(_) => StatusCode::UNPROCESSABLE_ENTITY,
             Self::EmailAlreadyExists(_) => StatusCode::CONFLICT,
             Self::JwtError(_) => StatusCode::FORBIDDEN,
