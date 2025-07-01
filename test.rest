@@ -10,6 +10,30 @@ Content-Type: application/json
     "password": "hunter42"
 }
 
+### signup user Alice
+
+POST http://localhost:6688/api/signup
+Content-Type: application/json
+
+{
+    "fullname": "Alice",
+    "email": "alice@acme.org",
+    "workspace": "acme",
+    "password": "hunter42"
+}
+
+### signup user Bob
+
+POST http://localhost:6688/api/signup
+Content-Type: application/json
+
+{
+    "fullname": "Bob",
+    "email": "bob@acme.org",
+    "workspace": "acme",
+    "password": "hunter42"
+}
+
 ### signin user
 # @name signin
 
@@ -33,13 +57,84 @@ Content-Type: application/json
     "password": "hunter43"
 }
 
+### get user list
+
+GET http://localhost:6688/api/users
+Authorization: Bearer {{token}}
+
+### create chat public channel
+
+POST http://localhost:6688/api/chat
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "general",
+    "members": [1, 2, 3],
+    "public": true
+}
+
+### create chat private channel
+
+POST http://localhost:6688/api/chat
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "private",
+    "members": [1, 2],
+    "public": false
+}
+
+### create chat group chat
+
+POST http://localhost:6688/api/chat
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
+{
+    "name": "group",
+    "members": [1, 2, 3],
+    "public": false
+}
+
 ### get chat list
 
 GET http://localhost:6688/api/chat
 Authorization: Bearer {{token}}
 
 
-### get user list
 
-GET http://localhost:6688/api/users
+### update chat name
+
+PATCH  http://localhost:6688/api/chat/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "general1",
+    "members": [1, 2, 3]
+}
+
+### update chat members
+
+PATCH http://localhost:6688/api/chat/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "general2",
+    "members": [1, 2, 3]
+}
+
+
+### delete chat
+
+DELETE http://localhost:6688/api/chat/4
+Authorization: Bearer {{token}}
+
+### delete chat(not found)
+
+DELETE http://localhost:6688/api/chat/1
 Authorization: Bearer {{token}}

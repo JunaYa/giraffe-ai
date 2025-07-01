@@ -1,44 +1,5 @@
 # Geektime Rust 语言训练营
 
-## 环境设置
-
-### 安装 Rust
-
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
-
-### 安装 VSCode 插件
-
-- crates: Rust 包管理
-- Even Better TOML: TOML 文件支持
-- Better Comments: 优化注释显示
-- Error Lens: 错误提示优化
-- GitLens: Git 增强
-- Github Copilot: 代码提示
-- indent-rainbow: 缩进显示优化
-- Prettier - Code formatter: 代码格式化
-- REST client: REST API 调试
-- rust-analyzer: Rust 语言支持
-- Rust Test lens: Rust 测试支持
-- Rust Test Explorer: Rust 测试概览
-- TODO Highlight: TODO 高亮
-- vscode-icons: 图标优化
-- YAML: YAML 文件支持
-
-### 安装 cargo generate
-
-cargo generate 是一个用于生成项目模板的工具。它可以使用已有的 github repo 作为模版生成新的项目。
-
-```bash
-cargo install cargo-generate
-```
-
-在我们的课程中，新的项目会使用 `tyr-rust-bootcamp/template` 模版生成基本的代码：
-
-```bash
-cargo generate tyr-rust-bootcamp/template
-```
 
 ### 安装 pre-commit
 
@@ -84,6 +45,19 @@ cargo nextest run -- test_should_work
 
 ```bash
 cargo install cargo-nextest --locked
+```
+
+// auto reload
+```bash
+cargo install cargo-watch systemfd
+```
+
+```sh
+systemfd --no-pid -s http::3000 -- cargo watch -x run
+```
+
+```bash
+cargo install sqlx-cli
 ```
 
 ## docker 启动 postgres
