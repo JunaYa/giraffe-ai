@@ -49,6 +49,7 @@ The rule system automatically detects project complexity:
 ### 2. Automatic Rule Loading
 
 Rules are automatically loaded based on:
+
 - Project complexity score
 - Detected dependencies (axum, sqlx, etc.)
 - Crate types (lib vs bin)
@@ -77,11 +78,13 @@ my-app/
 ### 🏗️ Core Architecture Rules
 
 **Workspace Management** (`core/workspace-management.mdc`)
+
 - Multi-crate projects use workspace organization
 - Centralized dependency management in `[workspace.dependencies]`
 - Consistent version management across crates
 
 **Complexity Detection** (`core/complexity-detection.mdc`)
+
 - Automated project complexity assessment
 - Rule selection based on complexity score
 - Adaptive architectural recommendations
@@ -89,11 +92,13 @@ my-app/
 ### 🚨 Error Handling Rules
 
 **Library Error Patterns** (`modules/error-handling/lib-error-patterns.mdc`)
+
 - Use `thiserror` for structured error types
 - Box large errors to avoid Result bloat
 - Domain-specific error hierarchies
 
 **Binary Error Patterns** (`modules/error-handling/bin-error-patterns.mdc`)
+
 - Use `anyhow` for pragmatic error handling
 - Rich error context with `.context()`
 - User-friendly error reporting
@@ -101,6 +106,7 @@ my-app/
 ### 📦 Serialization Rules
 
 **CamelCase Patterns** (`modules/serde-config/camelcase-patterns.mdc`)
+
 - All structs must use `#[serde(rename_all = "camelCase")]`
 - Consistent JSON output for frontend consumption
 - Proper handling of nested structures
@@ -108,6 +114,7 @@ my-app/
 ### 🏗️ Constructor Rules
 
 **TypedBuilder Patterns** (`modules/builder-patterns/typed-builder.mdc`)
+
 - Use TypedBuilder for structs with ≥4 parameters
 - Proper default values and optional field handling
 - Type-safe construction with compile-time validation
@@ -115,6 +122,7 @@ my-app/
 ### 🏗️ Domain Organization Rules
 
 **Domain-Driven Structure** (`modules/domain-organization/domain-driven-structure.mdc`)
+
 - Organize by business domain, not technical layers
 - Use meaningful file names (node.rs, workflow.rs, execution.rs)
 - Avoid generic names (models.rs, types.rs, traits.rs)
@@ -122,6 +130,7 @@ my-app/
 ### 🗄️ Database Rules
 
 **SQLx Patterns** (`modules/database/sqlx-patterns.mdc`)
+
 - Use `sqlx::query_as` with `FromRow` derive for type safety
 - NEVER use `sqlx::query!` macro
 - Repository pattern with proper error handling
@@ -129,6 +138,7 @@ my-app/
 ### 🧪 Testing Rules
 
 **Unit Test Patterns** (`modules/testing/unit-test-patterns.mdc`)
+
 - Unit tests MUST be in same file as implementation
 - Use `sqlx-db-tester` for database tests
 - Comprehensive coverage with in-file organization
@@ -136,6 +146,7 @@ my-app/
 ### ⚡ Concurrency Rules
 
 **Lock-free Patterns** (`modules/concurrency/lock-free-patterns.mdc`)
+
 - Use `DashMap` instead of `Mutex<HashMap<_, _>>`
 - Real-world node registry patterns
 - Atomic types for simple counters and flags
@@ -365,39 +376,43 @@ The rule system includes GitHub Actions workflows for automated validation:
 
 ## 📖 Rule Reference
 
-| Rule File | Purpose | When Applied |
-|-----------|---------|--------------|
-| `core/main.mdc` | Main rule coordinator | Always |
-| `core/complexity-detection.mdc` | Project analysis | Project initialization |
-| `core/workspace-management.mdc` | Multi-crate organization | Complex projects |
-| `modules/domain-organization/domain-driven-structure.mdc` | Domain-driven organization | All projects |
-| `modules/error-handling/lib-error-patterns.mdc` | Library error handling | Library crates |
-| `modules/error-handling/bin-error-patterns.mdc` | Binary error handling | Binary crates |
-| `modules/serde-config/camelcase-patterns.mdc` | JSON serialization | Serde usage |
-| `modules/builder-patterns/typed-builder.mdc` | Complex constructors | ≥4 parameters |
-| `modules/database/sqlx-patterns.mdc` | Database patterns | SQLx usage |
-| `modules/testing/unit-test-patterns.mdc` | Testing patterns | All code |
-| `modules/concurrency/lock-free-patterns.mdc` | High-performance concurrency | Concurrent operations |
-| `workflows/development-workflow.mdc` | Complete development process | Always |
+| Rule File                                                 | Purpose                      | When Applied           |
+| --------------------------------------------------------- | ---------------------------- | ---------------------- |
+| `core/main.mdc`                                           | Main rule coordinator        | Always                 |
+| `core/complexity-detection.mdc`                           | Project analysis             | Project initialization |
+| `core/workspace-management.mdc`                           | Multi-crate organization     | Complex projects       |
+| `modules/domain-organization/domain-driven-structure.mdc` | Domain-driven organization   | All projects           |
+| `modules/error-handling/lib-error-patterns.mdc`           | Library error handling       | Library crates         |
+| `modules/error-handling/bin-error-patterns.mdc`           | Binary error handling        | Binary crates          |
+| `modules/serde-config/camelcase-patterns.mdc`             | JSON serialization           | Serde usage            |
+| `modules/builder-patterns/typed-builder.mdc`              | Complex constructors         | ≥4 parameters          |
+| `modules/database/sqlx-patterns.mdc`                      | Database patterns            | SQLx usage             |
+| `modules/testing/unit-test-patterns.mdc`                  | Testing patterns             | All code               |
+| `modules/concurrency/lock-free-patterns.mdc`              | High-performance concurrency | Concurrent operations  |
+| `workflows/development-workflow.mdc`                      | Complete development process | Always                 |
 
 ## 🎯 Benefits
 
 ### 🔄 Consistency
+
 - Uniform error handling patterns across all crates
 - Consistent JSON output format for APIs
 - Standardized dependency management
 
 ### 📈 Scalability
+
 - Workspace organization for large projects
 - Lock-free concurrency for high performance
 - Modular architecture with clear boundaries
 
 ### 🛡️ Reliability
+
 - Type-safe construction patterns
 - Comprehensive error handling
 - Automated quality enforcement
 
 ### 👥 Developer Experience
+
 - Clear architectural guidelines
 - Automated rule selection
 - Comprehensive documentation and examples

@@ -1,6 +1,6 @@
 ---
-description: "Performance optimization strategies for Rust applications"
-globs: []
+description:
+globs:
 alwaysApply: false
 ---
 # ⚡ RUST PERFORMANCE OPTIMIZATION
@@ -8,7 +8,6 @@ alwaysApply: false
 > **TL;DR:** Performance optimization strategies for Rust applications, focusing on zero-cost abstractions, memory management, and profiling-driven optimization.
 
 ## 🔍 PERFORMANCE OPTIMIZATION STRATEGY
-
 
 ```mermaid
 graph TD
@@ -65,13 +64,13 @@ use std::time::Instant;
 
 #[cfg(feature = "profiling")]
 macro_rules! time_it {
-    ($name:expr, $block:block) => \{{
+    ($name:expr, $block:block) => {{
         let start = Instant::now();
         let result = $block;
         let duration = start.elapsed();
         tracing::info!("{} took {:?}", $name, duration);
         result
-    \}};
+    }};
 }
 
 #[cfg(not(feature = "profiling"))]

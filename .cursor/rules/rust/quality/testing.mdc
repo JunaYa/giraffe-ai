@@ -1,6 +1,6 @@
 ---
-description: "Testing standards and practices for Rust projects"
-globs: []
+description:
+globs:
 alwaysApply: false
 ---
 # 🧪 RUST TESTING STANDARDS
@@ -558,7 +558,7 @@ jobs:
           ~/.cargo/registry/cache/
           ~/.cargo/git/db/
           target/
-        key: $\{{ runner.os }}-cargo-$\{{ hashFiles('**/Cargo.lock') }}
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
     - name: Check formatting
       run: cargo fmt --all -- --check

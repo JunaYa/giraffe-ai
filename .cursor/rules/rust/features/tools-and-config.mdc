@@ -1,6 +1,6 @@
 ---
-description: "Tools and configuration best practices for Rust applications"
-globs: []
+description:
+globs:
 alwaysApply: false
 ---
 # 🛠️ TOOLS AND CONFIGURATION BEST PRACTICES
@@ -452,19 +452,19 @@ fn config_function(args: &[minijinja::Value]) -> Result<minijinja::Value, Templa
 {# templates/emails/welcome.html #}
 {% extends "emails/base.html" %}
 
-{% block title %}Welcome to \{{ config('app.name') }}!{% endblock %}
+{% block title %}Welcome to {{ config('app.name') }}!{% endblock %}
 
 {% block content %}
-<h1>Welcome, \{{ user.firstName }}!</h1>
+<h1>Welcome, {{ user.firstName }}!</h1>
 
-<p>Thank you for registering with \{{ config('app.name') }}. Your account has been created successfully.</p>
+<p>Thank you for registering with {{ config('app.name') }}. Your account has been created successfully.</p>
 
 <div class="user-details">
     <h2>Your Account Details:</h2>
     <ul>
-        <li><strong>Username:</strong> \{{ user.username }}</li>
-        <li><strong>Email:</strong> \{{ user.email }}</li>
-        <li><strong>Registration Date:</strong> \{{ user.createdAt | date_format("%B %d, %Y") }}</li>
+        <li><strong>Username:</strong> {{ user.username }}</li>
+        <li><strong>Email:</strong> {{ user.email }}</li>
+        <li><strong>Registration Date:</strong> {{ user.createdAt | date_format("%B %d, %Y") }}</li>
     </ul>
 </div>
 
@@ -507,9 +507,9 @@ fn config_function(args: &[minijinja::Value]) -> Result<minijinja::Value, Templa
         <ul>
         {% for item in order.items %}
             <li>
-                \{{ item.productName }} -
-                Quantity: \{{ item.quantity }} -
-                Price: \{{ item.unitPrice | currency }}
+                {{ item.productName }} -
+                Quantity: {{ item.quantity }} -
+                Price: {{ item.unitPrice | currency }}
             </li>
         {% endfor %}
         </ul>
@@ -518,16 +518,16 @@ fn config_function(args: &[minijinja::Value]) -> Result<minijinja::Value, Templa
     {% if order.trackingNumber %}
     <div class="tracking-info">
         <h3>Tracking Information:</h3>
-        <p>Your order is being shipped. Track your package: <strong>\{{ order.trackingNumber }}</strong></p>
+        <p>Your order is being shipped. Track your package: <strong>{{ order.trackingNumber }}</strong></p>
     </div>
     {% endif %}
 
     <div class="shipping-address">
         <h3>Shipping Address:</h3>
         <address>
-            \{{ order.shippingAddress.street }}<br>
-            \{{ order.shippingAddress.city }}, \{{ order.shippingAddress.state }} \{{ order.shippingAddress.zipCode }}<br>
-            \{{ order.shippingAddress.country }}
+            {{ order.shippingAddress.street }}<br>
+            {{ order.shippingAddress.city }}, {{ order.shippingAddress.state }} {{ order.shippingAddress.zipCode }}<br>
+            {{ order.shippingAddress.country }}
         </address>
     </div>
 </div>
