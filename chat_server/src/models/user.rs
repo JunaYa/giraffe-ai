@@ -213,8 +213,6 @@ mod tests {
 
         let input = CreateUser::new("acme", "Arjun001", "arjun001@acme.org", "hunter42");
         let user = User::create(&input, &pool).await?;
-        println!("user: {:?}", user);
-        println!("input: {:?}", input);
         assert_eq!(user.email, input.email);
         assert_eq!(user.fullname, input.fullname);
         assert!(user.id > 0);

@@ -70,7 +70,7 @@ feature-depth = 1
 # A list of advisory IDs to ignore. Note that ignored advisories will still
 # output a note when they are encountered.
 ignore = [
-  # "RUSTSEC-2023-0071",
+  { id = "RUSTSEC-2023-0071", reason = "No safe upgrade available yet - tracking for future fix. This affects jwt-simple->superboring->rsa which is not a direct workspace dependency" },
   # "RUSTSEC-2024-0436",
   #"RUSTSEC-0000-0000",
   #{ id = "RUSTSEC-0000-0000", reason = "you can specify a reason the advisory is ignored" },
@@ -93,16 +93,13 @@ ignore = [
 allow = [
   "MIT",
   "Apache-2.0",
-  "Unicode-DFS-2016",
   "CDLA-Permissive-2.0",
-  "MPL-2.0",
   "BSD-2-Clause",
   "BSD-3-Clause",
   "ISC",
   "CC0-1.0",
   "Unicode-3.0",
   "BSL-1.0",
-  "OpenSSL",
   "Zlib",
 ]
 # The confidence threshold for detecting a license from license text.
@@ -154,7 +151,7 @@ registries = [
 # https://embarkstudios.github.io/cargo-deny/checks/bans/cfg.html
 [bans]
 # Lint level for when multiple versions of the same crate are detected
-multiple-versions = "warn"
+multiple-versions = "deny"
 # Lint level for when a crate version requirement is `*`
 wildcards = "allow"
 # The graph highlighting used when creating dotgraphs for crates
@@ -210,8 +207,28 @@ deny = [
 
 # Certain crates/versions that will be skipped when doing duplicate detection.
 skip = [
-  #"ansi_term@0.11.0",
-  #{ crate = "ansi_term@0.11.0", reason = "you can specify a reason why it can't be updated/removed" },
+  # Core functionality duplicates
+  { crate = "bitflags", reason = "Required by features (v1.3.2) and notify-server (v2.9.1)" },
+  { crate = "getrandom", reason = "Required by crypto dependencies with different version requirements" },
+
+  # Regex-related duplicates
+  { crate = "regex-automata", reason = "Required by tracing-subscriber (v0.1.10) and other dependencies (v0.4.9)" },
+  { crate = "regex-syntax", reason = "Required by tracing-subscriber ecosystem" },
+
+  # System interface duplicates
+  { crate = "wasi", reason = "Required by different versions of getrandom" },
+  { crate = "webpki-roots", reason = "Required by sqlx TLS dependencies" },
+
+  # Windows-specific duplicates - required by various system interface dependencies
+  { crate = "windows-sys", reason = "Required by multiple system dependencies" },
+  { crate = "windows-targets", reason = "Required by multiple system dependencies" },
+  { crate = "windows_aarch64_gnullvm", reason = "Required by multiple system dependencies" },
+  { crate = "windows_aarch64_msvc", reason = "Required by multiple system dependencies" },
+  { crate = "windows_i686_gnu", reason = "Required by multiple system dependencies" },
+  { crate = "windows_i686_msvc", reason = "Required by multiple system dependencies" },
+  { crate = "windows_x86_64_gnu", reason = "Required by multiple system dependencies" },
+  { crate = "windows_x86_64_gnullvm", reason = "Required by multiple system dependencies" },
+  { crate = "windows_x86_64_msvc", reason = "Required by multiple system dependencies" },
 ]
 # Similarly to `skip` allows you to skip certain crates during duplicate
 # detection. Unlike skip, it also includes the entire tree of transitive

@@ -26,14 +26,14 @@ pub async fn verify_token(State(state): State<AppState>, req: Request, next: Nex
                         req
                     }
                     Err(e) => {
-                        let msg = format!("failed to verify token: {}", e);
+                        let msg = format!("failed to verify token: {e}");
                         warn!(msg);
                         return (StatusCode::FORBIDDEN, msg).into_response();
                     }
                 }
             }
             Err(e) => {
-                let msg = format!("failed to get authorization header: {}", e);
+                let msg = format!("failed to get authorization header: {e}");
                 warn!(msg);
                 return (StatusCode::UNAUTHORIZED, msg).into_response();
             }
@@ -69,7 +69,7 @@ mod tests {
         // good token
         let req = Request::builder()
             .uri("/")
-            .header("Authorization", format!("Bearer {}", token))
+            .header("Authorization", format!("Bearer {token}"))
             .body(Body::empty())?;
 
         let res = app.clone().oneshot(req).await?;

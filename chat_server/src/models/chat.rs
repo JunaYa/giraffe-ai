@@ -198,7 +198,6 @@ mod tests {
         let chat = Chat::create(input, 1, &pool)
             .await
             .expect("create chat failed");
-        println!("chat: {:?}", chat);
         assert_eq!(chat.ws_id, 1);
         assert_eq!(chat.members.len(), 3);
         assert_eq!(chat.r#type, ChatType::PublicChannel);
