@@ -28,6 +28,9 @@ pub enum AppError {
     #[error("not found: {0}")]
     NotFound(String),
 
+    #[error("io error: {0}")]
+    IoError(#[from] std::io::Error),
+
     #[error("password hash error")]
     PasswordHashError(#[from] argon2::password_hash::Error),
 
@@ -60,6 +63,7 @@ impl IntoResponse for AppError {
             Self::UpdateChatError(_) => StatusCode::BAD_REQUEST,
             Self::DeleteChatError(_) => StatusCode::BAD_REQUEST,
             Self::NotFound(_) => StatusCode::NOT_FOUND,
+            Self::IoError(_) => StatusCode::INTERNAL_SERVER_ERROR,
             Self::PasswordHashError(_) => StatusCode::UNPROCESSABLE_ENTITY,
             Self::EmailAlreadyExists(_) => StatusCode::CONFLICT,
             Self::JwtError(_) => StatusCode::FORBIDDEN,

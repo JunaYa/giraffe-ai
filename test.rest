@@ -138,3 +138,33 @@ Authorization: Bearer {{token}}
 
 DELETE http://localhost:6688/api/chat/1
 Authorization: Bearer {{token}}
+
+
+### upload files
+
+POST http://localhost:6688/api/upload
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; filename="test.png"
+Content-Type: application/octet-stream
+
+< /Users/arjun/Desktop/test.png
+--MyBoundary
+Content-Disposition: form-data; filename="hello.txt"
+Content-Type: text/plain
+
+Hello, World!
+--MyBoundary--
+
+
+### get files
+
+GET http://localhost:6688/api/files/1/d69/9f0/7150c00330707f524a8b290f5361a44ed0
+Authorization: Bearer {{token}}
+
+### get files
+
+GET http://localhost:6688/api/files/1/0a0/a9f/2a6772942557ab5355d76af442f8f65e01
+Authorization: Bearer {{token}}

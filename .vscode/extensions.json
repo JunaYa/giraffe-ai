@@ -13,7 +13,6 @@
     "hdevalke.rust-test-lens",
     "swellaby.vscode-rust-test-adapter",
     "wayou.vscode-todo-highlight",
-    "vscode-icons-team.vscode-icons",
     "redhat.vscode-yaml",
   ]
 }
