@@ -13,8 +13,7 @@ use tokio::fs;
 use std::{fmt, ops::Deref, sync::Arc};
 
 pub use error::{AppError, ErrorOutput};
-pub use models::ChatFile;
-pub use models::User;
+pub use models::{ChatFile, Message, User};
 
 use axum::{
     Router,
