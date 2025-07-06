@@ -29,8 +29,7 @@ impl AppState {
             let file = ChatFile::from_str(s)?;
             if !file.path(base_dir).exists() {
                 return Err(AppError::CreateMessageError(format!(
-                    "File {} does not exist",
-                    s
+                    "File {s} does not exist"
                 )));
             }
         }
