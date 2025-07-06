@@ -24,7 +24,7 @@ use axum::{
 pub use config::AppConfig;
 
 use crate::{
-    middleware::{set_layer, verify_token},
+    middleware::{set_layer, verify_chat, verify_token},
     utils::{DecodingKey, EncodingKey},
 };
 
@@ -45,7 +45,6 @@ pub async fn get_router(config: AppConfig) -> Result<Router, AppError> {
     let state = AppState::try_new(config).await?;
 
     let chat = Router::new()
-        .route("/", get(list_chat_handler).post(create_chat_handler))
         .route(
             "/{id}",
             get(get_chat_handler)
@@ -53,7 +52,9 @@ pub async fn get_router(config: AppConfig) -> Result<Router, AppError> {
                 .delete(delete_chat_handler)
                 .post(send_message_handler),
         )
-        .route("/{id}/messages", get(list_message_handler));
+        .route("/{id}/messages", get(list_message_handler))
+        .layer(from_fn_with_state(state.clone(), verify_chat))
+        .route("/", get(list_chat_handler).post(create_chat_handler));
 
     let api = Router::new()
         .route("/users", get(list_chat_users_handler))
