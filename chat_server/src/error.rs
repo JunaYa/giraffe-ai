@@ -25,7 +25,7 @@ pub enum AppError {
     #[error("delete chat error: {0}")]
     DeleteChatError(String),
 
-    #[error("chat file error: {0}")]
+    #[error("{0}")]
     ChatFileError(String),
 
     #[error("create message error: {0}")]

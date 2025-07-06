@@ -64,7 +64,7 @@ Authorization: Bearer {{token}}
 
 ### create chat public channel
 
-POST http://localhost:6688/api/chat
+POST http://localhost:6688/api/chats
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -76,7 +76,7 @@ Content-Type: application/json
 
 ### create chat private channel
 
-POST http://localhost:6688/api/chat
+POST http://localhost:6688/api/chats
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -88,7 +88,7 @@ Content-Type: application/json
 
 ### create chat group chat
 
-POST http://localhost:6688/api/chat
+POST http://localhost:6688/api/chats
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -101,14 +101,14 @@ Content-Type: application/json
 
 ### get chat list
 
-GET http://localhost:6688/api/chat
+GET http://localhost:6688/api/chats
 Authorization: Bearer {{token}}
 
 
 
 ### update chat name
 
-PATCH  http://localhost:6688/api/chat/1
+PATCH  http://localhost:6688/api/chats/1
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -119,7 +119,7 @@ Content-Type: application/json
 
 ### update chat members
 
-PATCH http://localhost:6688/api/chat/1
+PATCH http://localhost:6688/api/chats/1
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -131,12 +131,12 @@ Content-Type: application/json
 
 ### delete chat
 
-DELETE http://localhost:6688/api/chat/4
+DELETE http://localhost:6688/api/chats/4
 Authorization: Bearer {{token}}
 
 ### delete chat(not found)
 
-DELETE http://localhost:6688/api/chat/1
+DELETE http://localhost:6688/api/chats/8
 Authorization: Bearer {{token}}
 
 
@@ -167,4 +167,21 @@ Authorization: Bearer {{token}}
 ### get files
 
 GET http://localhost:6688/api/files/1/0a0/a9f/2a6772942557ab5355d76af442f8f65e01
+Authorization: Bearer {{token}}
+
+
+### send message
+
+POST http://localhost:6688/api/chats/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "content": "Hello, world! js",
+    "files": []
+}
+
+### get messages
+
+GET http://localhost:6688/api/chats/1/messages?last_id=5&limit=6
 Authorization: Bearer {{token}}

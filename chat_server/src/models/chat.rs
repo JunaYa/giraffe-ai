@@ -99,6 +99,22 @@ impl AppState {
         Ok(chat)
     }
 
+    pub async fn is_chat_member(&self, chat_id: i64, user_id: i64) -> Result<bool, AppError> {
+        let is_member = sqlx::query(
+            r#"
+            SELECT 1
+            FROM chats
+            WHERE id = $1 AND $2 = ANY(members)
+            "#,
+        )
+        .bind(chat_id)
+        .bind(user_id)
+        .fetch_optional(&self.pool)
+        .await?;
+
+        Ok(is_member.is_some())
+    }
+
     pub async fn update_chat(&self, id: i64, input: UpdateChat) -> Result<Chat, AppError> {
         let len = input.members.len();
         if len < 2 {
@@ -141,6 +157,17 @@ impl AppState {
             ));
         }
 
+        // Delete associated messages first to avoid foreign key constraint violation
+        sqlx::query(
+            r#"
+            DELETE FROM messages WHERE chat_id = $1
+            "#,
+        )
+        .bind(id)
+        .execute(&self.pool)
+        .await?;
+
+        // Now delete the chat
         sqlx::query(
             r#"
             DELETE FROM chats WHERE id = $1 AND ws_id = $2
@@ -227,6 +254,28 @@ mod tests {
         let (_tdb, state) = AppState::new_for_test().await?;
         let chats = state.fetch_all_chats(1).await.expect("fetch chats failed");
         assert_eq!(chats.len(), 4);
+        Ok(())
+    }
+
+    #[tokio::test]
+    async fn chat_is_member_should_work() -> Result<()> {
+        let (_tdb, state) = AppState::new_for_test().await?;
+
+        let is_member = state.is_chat_member(1, 1).await.expect("is member failed");
+        assert!(is_member);
+
+        // user 6 is not a member of chat 1
+        let is_member = state.is_chat_member(1, 6).await.expect("is member failed");
+        assert!(!is_member);
+
+        // chat 10 does not exist
+        let is_member = state.is_chat_member(10, 1).await.expect("is member failed");
+        assert!(!is_member);
+
+        // user 4 is a member of chat 2
+        let is_member = state.is_chat_member(2, 4).await.expect("is member failed");
+        assert!(!is_member);
+
         Ok(())
     }
 

@@ -13,12 +13,12 @@ use tokio::fs;
 use std::{fmt, ops::Deref, sync::Arc};
 
 pub use error::{AppError, ErrorOutput};
-pub use models::{ChatFile, Message, User};
+pub use models::*;
 
 use axum::{
     Router,
     middleware::from_fn_with_state,
-    routing::{get, patch, post},
+    routing::{get, post},
 };
 
 pub use config::AppConfig;
@@ -44,16 +44,20 @@ pub(crate) struct AppStateInner {
 pub async fn get_router(config: AppConfig) -> Result<Router, AppError> {
     let state = AppState::try_new(config).await?;
 
-    let api = Router::new()
-        .route("/users", get(list_chat_users_handler))
-        .route("/chat", get(list_chat_handler).post(create_chat_handler))
+    let chat = Router::new()
+        .route("/", get(list_chat_handler).post(create_chat_handler))
         .route(
-            "/chat/{id}",
-            patch(update_chat_handler)
+            "/{id}",
+            get(get_chat_handler)
+                .patch(update_chat_handler)
                 .delete(delete_chat_handler)
                 .post(send_message_handler),
         )
-        .route("/chat/{id}/messages", get(list_message_handler))
+        .route("/{id}/messages", get(list_message_handler));
+
+    let api = Router::new()
+        .route("/users", get(list_chat_users_handler))
+        .nest("/chats", chat)
         .route("/upload", post(upload_handler))
         .route("/files/{ws_id}/{*path}", get(file_handler))
         .layer(from_fn_with_state(state.clone(), verify_token))

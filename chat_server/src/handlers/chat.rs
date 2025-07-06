@@ -9,6 +9,14 @@ use axum::{
     response::IntoResponse,
 };
 
+pub(crate) async fn get_chat_handler(
+    State(state): State<AppState>,
+    Path(id): Path<i64>,
+) -> Result<impl IntoResponse, AppError> {
+    let chat = state.fetch_chat_by_id(id).await?;
+    Ok((StatusCode::OK, Json(chat)))
+}
+
 pub(crate) async fn list_chat_handler(
     Extension(user): Extension<User>,
     State(state): State<AppState>,
