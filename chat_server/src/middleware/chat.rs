@@ -63,7 +63,7 @@ mod tests {
 
         let req = Request::builder()
             .uri("/chat/1/messages")
-            .header(AUTHORIZATION, format!("Bearer {}", token))
+            .header(AUTHORIZATION, format!("Bearer {token}"))
             .body(Body::empty())?;
 
         let res = app.clone().oneshot(req).await.unwrap();
@@ -72,7 +72,7 @@ mod tests {
         // user not in chat
         let req = Request::builder()
             .uri("/chat/8/messages")
-            .header(AUTHORIZATION, format!("Bearer {}", token))
+            .header(AUTHORIZATION, format!("Bearer {token}"))
             .body(Body::empty())?;
 
         let res = app.clone().oneshot(req).await.unwrap();
